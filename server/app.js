@@ -21,7 +21,8 @@ require("./models/post");
 
 app.use(express.json());
 app.use(require("./routes/auth")); // requiring the auth router
-app.use(require("./routes/post")); // requiring the auth router
+app.use(require("./routes/post")); // requiring the post router
+app.use(require("./routes/user")); // requiring the user router
 
 // listining on Port
 app.listen(port, () => {
