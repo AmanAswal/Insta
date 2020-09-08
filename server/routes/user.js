@@ -98,6 +98,7 @@ router.put("/updatepic", requireLogin, (req, res) => {
   );
 });
 
+// search user
 router.post("/search-users", (req, res) => {
   let userPattern = new RegExp("^" + req.body.query);
   User.find({ email: { $regex: userPattern } })
@@ -109,5 +110,48 @@ router.post("/search-users", (req, res) => {
       console.log(err);
     });
 });
+
+// follow user
+router.put("follow", requireLogin, (req,res)=>{
+  User.findByIdAndUpdate(req.body.followId,{
+    $push:{followers:req.user._id}
+  },{
+    new:true
+  },(err,result)=>{
+    if(err){
+      return res.status(422).json({error:error})
+    }
+    User.findByIdAndUpdate(req.user._id,{
+      $push:{following:req.body.followId}
+    },{new:true}).select("-password").then(result=>{
+      res.json(result);
+    }).catch(err=>{
+      return res.status(422).json({error:err})
+    })
+  }
+  )
+})
+
+// unfollow user
+router.put("unfollow", requireLogin, (req,res)=>{
+  User.findByIdAndUpdate(req.body.unfollowId,{
+    $pull:{followers:req.user._id}
+  },{
+    new:true
+  },(err,result)=>{
+    if(err){
+      return res.status(422).json({error:error})
+    }
+    User.findByIdAndUpdate(req.user._id,{
+      $pull:{following:req.body.unfollowId}
+    },{new:true}).select("-password").then(result=>{
+      res.json(result);
+    }).catch(err=>{
+      return res.status(422).json({error:err})
+    })
+  }
+  )
+})
+
 
 module.exports = router;
