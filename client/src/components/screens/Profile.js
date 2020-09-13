@@ -29,7 +29,7 @@ const Profile = () => {
           <img
             style={{ width: "160px", height: "160px", borderRadius: "80px" }}
             alt="img"
-            src="https://images.unsplash.com/photo-1584518969469-c2d99c7760a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+            src={state?state.pic: "loading.."}
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ const Profile = () => {
           >
             <h6>{mypics.length} posts</h6>
             <h6>{state ? state.followers.length: "0"} followers</h6>
-            <h6>{state ? state.following.length: "0"} followers</h6>
+            <h6>{state ? state.following.length: "0"} following</h6>
           </div>
         </div>
       </div>
